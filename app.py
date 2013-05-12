@@ -3,6 +3,7 @@ import json
 import dateutil.parser
 import hashlib
 import os
+from time import gmtime, strftime
 
 app = Flask(__name__)
 
@@ -63,7 +64,7 @@ def sample():
 
     # Build response
     response = make_response(render_template('hello_world.html', greeting=greeting))
-    response.headers['ETag'] = hashlib.sha224(language+name+date.strftime('%d%m%Y')).hexdigest()
+    response.headers['ETag'] = hashlib.sha224(language+name+strftime('%d%m%Y',gmtime())).hexdigest()
     return response
 
 #Validate config e.g. /validate_config/?config={"lang":"english","name":"Pablo"}
