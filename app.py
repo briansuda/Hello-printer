@@ -71,9 +71,11 @@ def sample():
 @app.route("/validate_config/")
 def validate_config():
     json_response = {'errors': [], 'valid': True}
+    user_settings = {}
 
     # Extract config from POST
-    user_settings = json.loads(request.args['config'])
+    if 'config' in request.args:
+        user_settings = json.loads(request.args['config'])
     
     # If the user did choose a language:
     if not user_settings.get('lang', None):
