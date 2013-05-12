@@ -68,14 +68,14 @@ def sample():
     return response
 
 #Validate config e.g. /validate_config/?config={"lang":"english","name":"Pablo"}
-@app.route("/validate_config/")
+@app.route("/validate_config/", methods=['GET', 'POST'])
 def validate_config():
     json_response = {'errors': [], 'valid': True}
     user_settings = {}
 
     # Extract config from POST
-    if 'config' in request.args:
-        user_settings = json.loads(request.args['config'])
+    if 'config' in request.form:
+        user_settings = json.loads(request.form('config'))
     
     # If the user did choose a language:
     if not user_settings.get('lang', None):
@@ -91,7 +91,7 @@ def validate_config():
     if user_settings.get('language', None) in greetings:
         json_response['valid'] = False
         json_response['errors'].append("We couldn't find the language you selected (%s) Please select another" % user_settings['language'])
-    
+   
     response = make_response(json.dumps(json_response))
     response.mimetype = 'application/json'
     return response
